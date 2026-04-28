@@ -1,0 +1,1 @@
+- 2026-04-28: Android font family XML cannot share the same resource name as a raw TTF in res/font; use a distinct family name like plus_jakarta_sans_family.xml and reference the TTFs inside it.\n
