@@ -679,7 +679,7 @@ private fun PredictionResultCard(
     }
 
     ProgressCard(
-        title = "Hasil Model",
+        title = "Tingkat Keyakinan",
         value = "%.1f%%".format(confidence.coerceIn(0.0, 100.0))
     ) {
         Row(
@@ -974,10 +974,10 @@ private fun WarningScreenPreview() {
                 sks = "84",
                 gender = 1,
                 result = PredictResponse(
-                    status = "success",
+                    status = "Sukses",
                     prediction = 1,
                     confidence = 86.4,
-                    message = "Analisis FastAPI berhasil dilakukan"
+                    message = "Analisis berhasil dilakukan"
                 )
             ),
             onIps1Change = {},
@@ -1034,10 +1034,10 @@ private val previewLatestPrediction = LatestPrediction(
         gender = 1
     ),
     result = PredictResponse(
-        status = "success",
+        status = "Sukses",
         prediction = 1,
         confidence = 86.4,
-        message = "Analisis FastAPI berhasil dilakukan"
+        message = "Analisis berhasil dilakukan"
     )
 )
 

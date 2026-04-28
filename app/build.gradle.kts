@@ -40,6 +40,14 @@ android {
     }
 }
 
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.outputs.forEach { output ->
+            output.outputFileName.set("Prima-${variant.name}.apk")
+        }
+    }
+}
+
 dependencies {
     // Compose
     implementation(platform(libs.androidx.compose.bom))
