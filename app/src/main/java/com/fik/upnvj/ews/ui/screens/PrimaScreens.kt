@@ -662,6 +662,25 @@ private fun GenderOption(
     }
 }
 
+fun calculateRiskPercentage(
+    prediction: Int,
+    confidence: Double
+): Double {
+    val normalizedConfidence = confidence.coerceIn(0.0, 100.0)
+    return if (prediction == 1) {
+        100.0 - normalizedConfidence
+    } else {
+        normalizedConfidence
+    }.coerceIn(0.0, 100.0)
+}
+
+private fun localizedStatus(status: String): String {
+    return when (status.lowercase()) {
+        "success" -> "sukses"
+        else -> status
+    }
+}
+
 @Composable
 private fun PredictionResultCard(
     prediction: Int,
@@ -671,6 +690,7 @@ private fun PredictionResultCard(
 ) {
     val isSafe = prediction == 1
     val severity = if (isSafe) RiskSeverity.Low else RiskSeverity.High
+    val riskPercentage = calculateRiskPercentage(prediction, confidence)
     val statusLabel = if (isSafe) "Aman / On Track" else "Risiko Tinggi"
     val recommendation = if (isSafe) {
         "Pertahankan stabilitas IPS, selesaikan SKS inti tepat waktu, dan mulai rencanakan mata kuliah akhir."
@@ -679,8 +699,8 @@ private fun PredictionResultCard(
     }
 
     ProgressCard(
-        title = "Tingkat Keyakinan",
-        value = "%.1f%%".format(confidence.coerceIn(0.0, 100.0))
+        title = "Tingkat Risiko",
+        value = "%.1f%%".format(riskPercentage)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -690,7 +710,7 @@ private fun PredictionResultCard(
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(statusLabel, style = MaterialTheme.typography.headlineSmall)
                 Text(
-                    text = "Status API: $status",
+                    text = "Status API: ${localizedStatus(status)}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -698,7 +718,7 @@ private fun PredictionResultCard(
             RiskBadge(severity = severity)
         }
         LinearProgressIndicator(
-            progress = { (confidence / 100.0).toFloat().coerceIn(0f, 1f) },
+            progress = { (riskPercentage / 100.0).toFloat().coerceIn(0f, 1f) },
             modifier = Modifier.fillMaxWidth(),
             color = if (isSafe) SuccessGreen else RiskRed,
             trackColor = MistGray,
@@ -851,7 +871,7 @@ fun ProfileScreen(
         }
         latestPrediction?.let { prediction ->
             SectionCard(title = "Prediksi Terakhir") {
-                ProfileRow("Status API", prediction.result.status)
+                ProfileRow("Status API", localizedStatus(prediction.result.status))
                 ProfileRow("Risiko", if (prediction.result.prediction == 1) "Rendah" else "Tinggi")
                 ProfileRow("Confidence", "%.1f%%".format(prediction.result.confidence.coerceIn(0.0, 100.0)))
                 ProfileRow("SKS", prediction.input.sks.toString())

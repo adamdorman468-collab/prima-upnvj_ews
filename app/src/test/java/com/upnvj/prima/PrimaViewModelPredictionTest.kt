@@ -7,6 +7,7 @@ import com.fik.upnvj.ews.data.model.PredictResponse
 import com.fik.upnvj.ews.data.model.UserProfile
 import com.fik.upnvj.ews.data.repository.LocalSessionRepository
 import com.fik.upnvj.ews.data.repository.PredictionRepository
+import com.fik.upnvj.ews.ui.screens.calculateRiskPercentage
 import com.fik.upnvj.ews.ui.main.AuthMode
 import com.fik.upnvj.ews.ui.main.PrimaViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,24 @@ import retrofit2.Response
 import java.io.IOException
 
 class PrimaViewModelPredictionTest {
+
+    @Test
+    fun safePredictionConvertsConfidenceToLowRiskPercentage() {
+        assertEquals(13.8, calculateRiskPercentage(prediction = 1, confidence = 86.2), 0.001)
+    }
+
+    @Test
+    fun unsafePredictionUsesConfidenceAsRiskPercentage() {
+        assertEquals(86.2, calculateRiskPercentage(prediction = 0, confidence = 86.2), 0.001)
+    }
+
+    @Test
+    fun riskPercentageIsAlwaysClamped() {
+        assertEquals(0.0, calculateRiskPercentage(prediction = 0, confidence = -5.0), 0.0)
+        assertEquals(100.0, calculateRiskPercentage(prediction = 0, confidence = 150.0), 0.0)
+        assertEquals(0.0, calculateRiskPercentage(prediction = 1, confidence = 120.0), 0.0)
+        assertEquals(100.0, calculateRiskPercentage(prediction = 1, confidence = -10.0), 0.0)
+    }
 
     @Test
     fun noStoredUserStartsInSignupLoggedOutState() {
