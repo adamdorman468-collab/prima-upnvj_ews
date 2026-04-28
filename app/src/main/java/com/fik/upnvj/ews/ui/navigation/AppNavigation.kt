@@ -1,12 +1,17 @@
 package com.fik.upnvj.ews.ui.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +25,7 @@ import com.fik.upnvj.ews.ui.screens.ProfileScreen
 import com.fik.upnvj.ews.ui.screens.ProgressScreen
 import com.fik.upnvj.ews.ui.screens.SplashScreen
 import com.fik.upnvj.ews.ui.screens.WarningScreen
+import com.fik.upnvj.ews.ui.theme.PrimaTheme
 
 @Composable
 fun AppNavigation(
@@ -151,5 +157,64 @@ private fun MainScaffold(
         bottomBar = { PrimaBottomNav(navController = navController) }
     ) { innerPadding ->
         content(Modifier.padding(innerPadding))
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PrimaTopBarPreview() {
+    PrimaTheme {
+        PrimaTopBar(title = "Dashboard")
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PrimaBottomNavPreview() {
+    PrimaTheme {
+        val navController = rememberNavController()
+        Scaffold(
+            bottomBar = { PrimaBottomNav(navController = navController) }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = PrimaRoute.Dashboard.route,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable(PrimaRoute.Dashboard.route) { }
+                composable(PrimaRoute.Progress.route) { }
+                composable(PrimaRoute.Warning.route) { }
+                composable(PrimaRoute.Profile.route) { }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MainScaffoldPreview() {
+    PrimaTheme {
+        val navController = rememberNavController()
+        Column {
+            NavHost(
+                navController = navController,
+                startDestination = PrimaRoute.Dashboard.route,
+                modifier = Modifier.height(1.dp)
+            ) {
+                composable(PrimaRoute.Dashboard.route) { }
+                composable(PrimaRoute.Progress.route) { }
+                composable(PrimaRoute.Warning.route) { }
+                composable(PrimaRoute.Profile.route) { }
+            }
+        }
+        MainScaffold(
+            navController = navController,
+            title = "Dashboard"
+        ) { modifier ->
+            Text(
+                text = "Preview konten dashboard",
+                modifier = modifier
+            )
+        }
     }
 }

@@ -12,23 +12,27 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.fik.upnvj.ews.data.model.RiskSeverity
 import com.fik.upnvj.ews.ui.navigation.PrimaRoute
 import com.fik.upnvj.ews.ui.navigation.PrimaTabs
@@ -177,12 +181,11 @@ fun PrimaBottomNav(navController: NavController) {
                         shape = CircleShape,
                         color = if (selected) ElectricTeal else GhostGray
                     ) {
-                        Text(
-                            text = tab.iconText,
-                            modifier = Modifier.padding(top = 5.dp),
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.labelMedium,
-                            color = DeepCharcoal
+                        Icon(
+                            painter = painterResource(id = tab.iconResId),
+                            contentDescription = tab.label,
+                            modifier = Modifier.padding(4.dp),
+                            tint = DeepCharcoal
                         )
                     }
                 },
@@ -220,16 +223,41 @@ fun RiskBadge(
 @Composable
 private fun PrimaComponentsPreview() {
     PrimaTheme {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            PrimaryButton(text = "Masuk", onClick = {})
-            StatCard(label = "Rerata IPS", value = "3.25", supportingText = "Semester 1-4")
-            ProgressCard(title = "SKS", value = "84") {
-                Text("Ringkasan prediksi tersimpan.")
+        val navController = rememberNavController()
+        Scaffold(
+            topBar = { PrimaTopBar(title = "Dashboard") },
+            bottomBar = { PrimaBottomNav(navController = navController) }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = PrimaRoute.Dashboard.route,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable(PrimaRoute.Dashboard.route) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        PrimaryButton(text = "Masuk", onClick = {})
+                        StatCard(
+                            label = "Rerata IPS",
+                            value = "3.25",
+                            supportingText = "Semester 1-4"
+                        )
+                        ProgressCard(title = "SKS", value = "84") {
+                            Text("Ringkasan prediksi tersimpan.")
+                        }
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            RiskBadge(severity = RiskSeverity.Low)
+                            RiskBadge(severity = RiskSeverity.Medium)
+                            RiskBadge(severity = RiskSeverity.High)
+                        }
+                    }
+                }
+                composable(PrimaRoute.Progress.route) { }
+                composable(PrimaRoute.Warning.route) { }
+                composable(PrimaRoute.Profile.route) { }
             }
-            RiskBadge(severity = RiskSeverity.Medium)
         }
     }
 }

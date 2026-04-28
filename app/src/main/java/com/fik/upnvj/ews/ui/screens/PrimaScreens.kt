@@ -46,6 +46,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fik.upnvj.ews.data.model.AcademicPredictionInput
 import com.fik.upnvj.ews.data.model.DashboardSummary
 import com.fik.upnvj.ews.data.model.LatestPrediction
@@ -82,27 +83,23 @@ fun SplashScreen(onFinished: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.background)
+            .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(18.dp)
+            verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Prima logo",
-                modifier = Modifier.size(116.dp)
+                modifier = Modifier.size(168.dp)
             )
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "Prima",
-                    style = MaterialTheme.typography.displayLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Text(
                     text = "Early Warning System",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -909,12 +906,38 @@ private fun ProfileRow(label: String, value: String) {
     }
 }
 
+
+
+@Preview(showBackground = true)
+@Composable
+private fun SplashScreenPreview() {
+    PrimaTheme {
+        SplashScreen(onFinished = {})
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun LoginScreenPreview() {
     PrimaTheme {
         LoginScreen(
             authMode = AuthMode.Signup,
+            authErrorMessage = null,
+            signupErrors = emptyMap(),
+            onShowLogin = {},
+            onShowSignup = {},
+            onLogin = { _, _ -> },
+            onSignup = { _, _, _, _, _, _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoginScreenLoginPreview() {
+    PrimaTheme {
+        LoginScreen(
+            authMode = AuthMode.Login,
             authErrorMessage = null,
             signupErrors = emptyMap(),
             onShowLogin = {},

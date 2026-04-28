@@ -75,7 +75,7 @@ object PredictionInputValidator {
         errors: MutableMap<String, String>
     ): Int? {
         val parsed = value.trim().toIntOrNull()
-        if (parsed == null || parsed !in 0..100) {
+        if (parsed == null || parsed !in 0..88) {
             errors[PredictionInputKeys.SKS] = "Total SKS harus angka 0 sampai 100."
             return null
         }
