@@ -44,10 +44,12 @@ import com.fik.upnvj.ews.ui.theme.WarningAmber
 fun PrimaryButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     Button(
         onClick = onClick,
+        enabled = enabled,
         modifier = modifier
             .fillMaxWidth()
             .height(54.dp),
@@ -223,9 +225,9 @@ private fun PrimaComponentsPreview() {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             PrimaryButton(text = "Masuk", onClick = {})
-            StatCard(label = "IPK", value = "3.25", supportingText = "Stabil")
-            ProgressCard(title = "SKS", value = "106/144") {
-                Text("Progress akademik berjalan.")
+            StatCard(label = "Rerata IPS", value = "3.25", supportingText = "Semester 1-4")
+            ProgressCard(title = "SKS", value = "84") {
+                Text("Ringkasan prediksi tersimpan.")
             }
             RiskBadge(severity = RiskSeverity.Medium)
         }

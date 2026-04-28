@@ -30,10 +30,10 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("**Nilai IPS Tiap Semester**")
-    ips1 = st.number_input("IPS Semester 1", min_value=0.0, max_value=4.0, value=3.0, step=0.1)
-    ips2 = st.number_input("IPS Semester 2", min_value=0.0, max_value=4.0, value=3.0, step=0.1)
-    ips3 = st.number_input("IPS Semester 3", min_value=0.0, max_value=4.0, value=3.0, step=0.1)
-    ips4 = st.number_input("IPS Semester 4", min_value=0.0, max_value=4.0, value=3.0, step=0.1)
+    ips1 = st.number_input("IPS Semester 1", min_value=0.0, max_value=4.01, value=3.0, step=0.1)
+    ips2 = st.number_input("IPS Semester 2", min_value=0.0, max_value=4.01, value=3.0, step=0.1)
+    ips3 = st.number_input("IPS Semester 3", min_value=0.0, max_value=4.01, value=3.0, step=0.1)
+    ips4 = st.number_input("IPS Semester 4", min_value=0.0, max_value=4.01, value=3.0, step=0.1)
 
 with col2:
     st.markdown("**Informasi Akademik Lainnya**")
