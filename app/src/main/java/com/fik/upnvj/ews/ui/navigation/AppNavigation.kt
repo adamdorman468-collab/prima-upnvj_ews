@@ -20,6 +20,7 @@ import com.fik.upnvj.ews.ui.screens.ProfileScreen
 import com.fik.upnvj.ews.ui.screens.ProgressScreen
 import com.fik.upnvj.ews.ui.screens.SplashScreen
 import com.fik.upnvj.ews.ui.screens.WarningScreen
+import com.fik.upnvj.ews.ui.screens.EwsInputScreen
 
 @Composable
 fun AppNavigation(
@@ -58,6 +59,7 @@ fun AppNavigation(
                     dashboard = uiState.dashboard,
                     onOpenWarning = { navController.navigate(PrimaRoute.Warning.route) },
                     onOpenProgress = { navController.navigate(PrimaRoute.Progress.route) },
+                    onOpenEwsInput = { navController.navigate(PrimaRoute.EwsInput.route) },
                     modifier = modifier
                 )
             }
@@ -88,6 +90,11 @@ fun AppNavigation(
                     },
                     modifier = modifier
                 )
+            }
+        }
+        composable(PrimaRoute.EwsInput.route) {
+            MainScaffold(navController = navController, title = "EWS Akademik") { modifier ->
+                EwsInputScreen(modifier = modifier)
             }
         }
     }

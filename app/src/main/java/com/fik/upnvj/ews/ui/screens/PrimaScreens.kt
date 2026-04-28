@@ -26,6 +26,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -186,6 +188,7 @@ fun DashboardScreen(
     dashboard: DashboardSummary,
     onOpenWarning: () -> Unit,
     onOpenProgress: () -> Unit,
+    onOpenEwsInput: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -261,6 +264,92 @@ fun DashboardScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             QuickActionCard("Lihat Warning", "Penyebab risiko", onOpenWarning, Modifier.weight(1f))
             QuickActionCard("Cek Progress", "Grafik IPS", onOpenProgress, Modifier.weight(1f))
+        }
+        PrimaryButton(text = "Isi Form EWS", onClick = onOpenEwsInput)
+    }
+}
+
+@Composable
+fun EwsInputScreen(modifier: Modifier = Modifier) {
+    var ips1 by remember { mutableStateOf("") }
+    var ips2 by remember { mutableStateOf("") }
+    var ips3 by remember { mutableStateOf("") }
+    var ips4 by remember { mutableStateOf("") }
+    var sks by remember { mutableStateOf("") }
+    var selectedGender by remember { mutableStateOf("Laki-laki") }
+    var showResult by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        Text(
+            text = "EWS Akademik FIK UPNVJ",
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        PrimaTextField(value = ips1, onValueChange = { ips1 = it }, label = "IPS Semester 1", keyboardType = KeyboardType.Number)
+        PrimaTextField(value = ips2, onValueChange = { ips2 = it }, label = "IPS Semester 2", keyboardType = KeyboardType.Number)
+        PrimaTextField(value = ips3, onValueChange = { ips3 = it }, label = "IPS Semester 3", keyboardType = KeyboardType.Number)
+        PrimaTextField(value = ips4, onValueChange = { ips4 = it }, label = "IPS Semester 4", keyboardType = KeyboardType.Number)
+        PrimaTextField(value = sks, onValueChange = { sks = it }, label = "Total SKS", keyboardType = KeyboardType.Number)
+
+        Text(text = "Jenis Kelamin", style = MaterialTheme.typography.bodyMedium)
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = selectedGender == "Laki-laki",
+                    onClick = { selectedGender = "Laki-laki" },
+                    colors = RadioButtonDefaults.colors(selectedColor = ElectricTeal)
+                )
+                Text(text = "Laki-laki", style = MaterialTheme.typography.bodyMedium)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = selectedGender == "Perempuan",
+                    onClick = { selectedGender = "Perempuan" },
+                    colors = RadioButtonDefaults.colors(selectedColor = ElectricTeal)
+                )
+                Text(text = "Perempuan", style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+
+        PrimaryButton(
+            text = "PREDIKSI SEKARANG",
+            onClick = { showResult = true }
+        )
+
+        if (showResult) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "Hasil Prediksi",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "Risiko: Sedang",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = WarningAmber
+                    )
+                    Text(
+                        text = "Rekomendasi: Konsultasi akademik dan fokus pada peningkatan IPS.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
         }
     }
 }
@@ -540,7 +629,8 @@ private fun DashboardScreenPreview() {
             profile = repository.getProfile(),
             dashboard = repository.getDashboardSummary(),
             onOpenWarning = {},
-            onOpenProgress = {}
+            onOpenProgress = {},
+            onOpenEwsInput = {}
         )
     }
 }

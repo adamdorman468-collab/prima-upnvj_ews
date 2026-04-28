@@ -4,6 +4,7 @@ sealed class PrimaRoute(val route: String) {
     data object Splash : PrimaRoute("splash")
     data object Login : PrimaRoute("login")
     data object Dashboard : PrimaRoute("dashboard")
+    data object EwsInput : PrimaRoute("ews-input")
     data object Warning : PrimaRoute("warning")
     data object Progress : PrimaRoute("progress")
     data object Profile : PrimaRoute("profile")
