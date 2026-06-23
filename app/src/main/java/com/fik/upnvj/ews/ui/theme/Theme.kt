@@ -19,7 +19,9 @@ private val LightColorScheme = lightColorScheme(
     surfaceVariant = MistGray,
     onSurfaceVariant = SlateGray,
     error = RiskRed,
-    onError = White
+    onError = White,
+    outline = MistGray,
+    outlineVariant = SurfaceDim
 )
 
 private val PrimaShapes = Shapes(

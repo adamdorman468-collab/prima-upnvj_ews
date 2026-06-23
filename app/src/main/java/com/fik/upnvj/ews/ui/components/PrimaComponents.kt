@@ -1,27 +1,33 @@
 package com.fik.upnvj.ews.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,11 +42,13 @@ import androidx.navigation.compose.rememberNavController
 import com.fik.upnvj.ews.data.model.RiskSeverity
 import com.fik.upnvj.ews.ui.navigation.PrimaRoute
 import com.fik.upnvj.ews.ui.navigation.PrimaTabs
+import com.fik.upnvj.ews.ui.theme.DarkTeal
 import com.fik.upnvj.ews.ui.theme.DeepCharcoal
 import com.fik.upnvj.ews.ui.theme.ElectricTeal
-import com.fik.upnvj.ews.ui.theme.GhostGray
+import com.fik.upnvj.ews.ui.theme.MistGray
 import com.fik.upnvj.ews.ui.theme.PrimaTheme
 import com.fik.upnvj.ews.ui.theme.RiskRed
+import com.fik.upnvj.ews.ui.theme.SlateGray
 import com.fik.upnvj.ews.ui.theme.SuccessGreen
 import com.fik.upnvj.ews.ui.theme.WarningAmber
 
@@ -60,8 +68,30 @@ fun PrimaryButton(
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
             containerColor = ElectricTeal,
-            contentColor = DeepCharcoal
+            contentColor = DeepCharcoal,
+            disabledContainerColor = MistGray,
+            disabledContentColor = SlateGray
         )
+    ) {
+        Text(text = text, style = MaterialTheme.typography.labelLarge)
+    }
+}
+
+@Composable
+fun SecondaryButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentColor: Color = MaterialTheme.colorScheme.onSurface
+) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(54.dp),
+        shape = CircleShape,
+        border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = ButtonDefaults.outlinedButtonColors(contentColor = contentColor)
     ) {
         Text(text = text, style = MaterialTheme.typography.labelLarge)
     }
@@ -78,11 +108,12 @@ fun StatCard(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Text(
                 text = label,
@@ -114,7 +145,8 @@ fun ProgressCard(
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -138,17 +170,51 @@ fun ProgressCard(
 }
 
 @Composable
-fun PrimaTopBar(title: String) {
-    Surface(
+fun SectionCard(
+    title: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Card(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.background,
-        tonalElevation = 0.dp
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
-        Text(
-            text = title,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onBackground
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                color = DarkTeal
+            )
+            content()
+        }
+    }
+}
+
+@Composable
+fun PrimaTopBar(title: String) {
+    Column {
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.background,
+            tonalElevation = 0.dp
+        ) {
+            Text(
+                text = title,
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(horizontal = 20.dp, vertical = 18.dp),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+        HorizontalDivider(
+            color = MaterialTheme.colorScheme.outlineVariant,
+            thickness = 1.dp
         )
     }
 }
@@ -158,7 +224,10 @@ fun PrimaBottomNav(navController: NavController) {
     val backStackEntry = navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry.value?.destination
 
-    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 0.dp
+    ) {
         PrimaTabs.forEach { tab ->
             val selected = currentDestination?.hierarchy?.any {
                 it.route == tab.route.route
@@ -176,20 +245,35 @@ fun PrimaBottomNav(navController: NavController) {
                     }
                 },
                 icon = {
-                    Surface(
-                        modifier = Modifier.size(28.dp),
-                        shape = CircleShape,
-                        color = if (selected) ElectricTeal else GhostGray
-                    ) {
+                    if (selected) {
+                        Surface(
+                            modifier = Modifier.size(32.dp),
+                            shape = CircleShape,
+                            color = ElectricTeal
+                        ) {
+                            Icon(
+                                painter = painterResource(id = tab.iconResId),
+                                contentDescription = tab.label,
+                                modifier = Modifier.padding(6.dp),
+                                tint = DeepCharcoal
+                            )
+                        }
+                    } else {
                         Icon(
                             painter = painterResource(id = tab.iconResId),
                             contentDescription = tab.label,
-                            modifier = Modifier.padding(4.dp),
-                            tint = DeepCharcoal
+                            modifier = Modifier.size(24.dp),
+                            tint = SlateGray
                         )
                     }
                 },
-                label = { Text(tab.label) }
+                label = {
+                    Text(
+                        text = tab.label,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (selected) DarkTeal else SlateGray
+                    )
+                }
             )
         }
     }
@@ -208,13 +292,14 @@ fun RiskBadge(
     Surface(
         modifier = modifier,
         shape = CircleShape,
-        color = badgeColor.copy(alpha = 0.16f),
+        color = badgeColor.copy(alpha = 0.20f),
         contentColor = badgeColor
     ) {
         Text(
             text = severity.label,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            style = MaterialTheme.typography.labelMedium
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold
         )
     }
 }
@@ -239,6 +324,7 @@ private fun PrimaComponentsPreview() {
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         PrimaryButton(text = "Masuk", onClick = {})
+                        SecondaryButton(text = "Keluar", onClick = {})
                         StatCard(
                             label = "Rerata IPS",
                             value = "3.25",
@@ -246,6 +332,9 @@ private fun PrimaComponentsPreview() {
                         )
                         ProgressCard(title = "SKS", value = "84") {
                             Text("Ringkasan prediksi tersimpan.")
+                        }
+                        SectionCard(title = "Informasi") {
+                            Text("Section card content")
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             RiskBadge(severity = RiskSeverity.Low)
