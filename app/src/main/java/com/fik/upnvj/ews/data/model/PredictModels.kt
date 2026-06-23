@@ -16,4 +16,14 @@ data class PredictResponse(
     @SerializedName("prediction") val prediction: Int,
     @SerializedName("confidence") val confidence: Double,
     @SerializedName("message") val message: String
-)
+) {
+    val riskPercentage: Double
+        get() {
+            val normalizedConfidence = confidence.coerceIn(0.0, 100.0)
+            return if (prediction == 1) {
+                100.0 - normalizedConfidence
+            } else {
+                normalizedConfidence
+            }.coerceIn(0.0, 100.0)
+        }
+}

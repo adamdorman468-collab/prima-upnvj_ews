@@ -5,7 +5,7 @@ data class DashboardSummary(
     val status: String = "",
     val riskLabel: String = "",
     val severity: RiskSeverity = RiskSeverity.Medium,
-    val confidence: Double = 0.0,
+    val riskPercentage: Double = 0.0,
     val completedCredits: Int = 0,
     val averageIps: Double = 0.0,
     val message: String = ""
