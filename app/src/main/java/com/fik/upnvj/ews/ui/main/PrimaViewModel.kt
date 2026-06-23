@@ -330,7 +330,7 @@ private fun buildDashboardSummary(latestPrediction: LatestPrediction?): Dashboar
         status = result.status,
         riskLabel = severity.label,
         severity = severity,
-        confidence = result.confidence,
+        riskPercentage = result.riskPercentage,
         completedCredits = input.sks,
         averageIps = input.averageIps,
         message = result.message

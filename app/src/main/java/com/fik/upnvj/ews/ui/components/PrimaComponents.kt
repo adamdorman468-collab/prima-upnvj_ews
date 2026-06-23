@@ -52,6 +52,46 @@ import com.fik.upnvj.ews.ui.theme.SlateGray
 import com.fik.upnvj.ews.ui.theme.SuccessGreen
 import com.fik.upnvj.ews.ui.theme.WarningAmber
 
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import com.fik.upnvj.ews.ui.theme.ElectricTeal
+import com.fik.upnvj.ews.ui.theme.MistGray
+import com.fik.upnvj.ews.ui.theme.White
+
+@Composable
+fun PrimaTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    keyboardType: KeyboardType,
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    isPassword: Boolean = false,
+    errorText: String? = null
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        label = { Text(label) },
+        singleLine = true,
+        isError = errorText != null,
+        supportingText = errorText?.let { message -> { Text(message) } },
+        shape = MaterialTheme.shapes.small,
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = White,
+            unfocusedContainerColor = White,
+            focusedBorderColor = ElectricTeal,
+            unfocusedBorderColor = MistGray
+        )
+    )
+}
+
 @Composable
 fun PrimaryButton(
     text: String,
